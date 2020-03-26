@@ -1,2 +1,8 @@
 # ios-scan
-mpaas scan code demo
+
+## 功能介绍
+本 Demo 提供功能如下：
+• 全屏扫码页面
+• 默认样式扫码页面
+• 自定义扫码页面
+
