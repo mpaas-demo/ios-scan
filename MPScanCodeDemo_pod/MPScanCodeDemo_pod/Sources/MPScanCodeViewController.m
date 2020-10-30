@@ -10,10 +10,10 @@
 
 @interface MPScanCodeViewController ()
 
-@property (nonatomic, strong) UIView *maskView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
-@property (nonatomic, assign) BOOL viewHadAppear;
-@property (nonatomic, assign) BOOL cameraHadResume;
+//@property (nonatomic, strong) UIView *maskView;
+//@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
+//@property (nonatomic, assign) BOOL viewHadAppear;
+//@property (nonatomic, assign) BOOL cameraHadResume;
 
 @end
 
@@ -24,72 +24,46 @@
     if (self = [super init])
     {
         self.delegate = self;
-        self.cameraWidthPercent = 0.67;
         self.scanType = ScanType_All_Code;
     }
     return self;
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"扫码";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(selectPhoto)];
-    
+    // 自定义扫码界面大小
     CGRect rect = [MPScanCodeViewController constructScanAnimationRect];
-    if (self.usingDefaultStyle) {
-        self.animationRect = rect;
-    } else {
-        int extend = CGRectGetWidth(self.view.frame) / 320 * 10;
-        CGFloat offset = (CGRectGetWidth(self.view.frame) + extend * 2 - CGRectGetWidth(rect)) / 2;
-        self.rectOfInterest = CGRectMake(rect.origin.x - offset,
-                                         rect.origin.y - offset,
-                                         CGRectGetWidth(rect) + 2 * offset,
-                                         CGRectGetHeight(rect) + 2 * offset);
-    }
+    self.rectOfInterest = rect;
+    // 自定义相册按钮
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择相册" style:UIBarButtonItemStylePlain target:self action:@selector(selectPhoto)];
 }
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.maskView = [[UIView alloc] initWithFrame:self.view.bounds];
-    self.maskView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:self.maskView];
-    self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    self.indicatorView.center = self.maskView.center;
-    [self.maskView addSubview:self.indicatorView];
-    [self.indicatorView startAnimating];
++ (CGRect)constructScanAnimationRect
+{
+    CGSize screenXY = [UIScreen mainScreen].bounds.size;
+    NSInteger focusFrameWH = screenXY.width / 320 * 220;//as wx
+    int offet = 10;
+    if (screenXY.height == 568)
+        offet = 19;
+    return CGRectMake((screenXY.width - focusFrameWH) / 2,
+                      (screenXY.height - 64 - focusFrameWH - 83 - 50 - offet) / 2 + 64,
+                      focusFrameWH,
+                      focusFrameWH);
 }
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.viewHadAppear = YES;
-    [self checkAnimation];
+-(void)buildContainerView:(UIView*)containerView
+{
+    // 自定义扫码框 view
+    UIView* bg = [[UIView alloc] initWithFrame:containerView.bounds];
+    [containerView addSubview:bg];
+    CGRect rect = [MPScanCodeViewController constructScanAnimationRect];
+    UIView* view = [[UIView alloc] initWithFrame:rect];
+    view.backgroundColor = [UIColor orangeColor];
+    view.alpha = 0.5;
+    [bg addSubview:view];
 }
-
-#pragma mark Action
 - (void)selectPhoto
 {
     [self scanPhotoLibrary];
-}
-
-- (void)resumeScan
-{
-    [super resumeScan];
-    self.cameraHadResume = YES;
-    [self checkAnimation];
-}
-
-- (void)checkAnimation
-{
-    if (self.viewHadAppear && self.cameraHadResume)
-    {
-        [self.indicatorView removeFromSuperview];
-        [self.indicatorView stopAnimating];
-        self.indicatorView = nil;
-        
-        [self.maskView removeFromSuperview];
-        self.maskView = nil;
-    }
 }
 
 #pragma mark TBScanViewControllerDelegate
@@ -119,6 +93,12 @@
         alert.tag = 9999;
         [alert show];
     });
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // 持续扫码
+    [self resumeScan];
 }
 
 - (void)cameraPermissionDenied
@@ -156,38 +136,11 @@
     NSLog(@"userTrack:%@, args:%@", name, data);
 }
 
--(void)buildContainerView:(UIView*)containerView
-{
-    if (!self.usingDefaultStyle) {
-        UIView* bg = [[UIView alloc] initWithFrame:containerView.bounds];
-        [containerView addSubview:bg];
-        CGRect rect = [MPScanCodeViewController constructScanAnimationRect];
-        UIView* view = [[UIView alloc] initWithFrame:rect];
-        view.backgroundColor = [UIColor orangeColor];
-        view.alpha = 0.3;
-        [bg addSubview:view];
-    }
-}
-
-+ (CGRect)constructScanAnimationRect
-{
-    CGSize screenXY = [UIScreen mainScreen].bounds.size;
-    NSInteger focusFrameWH = screenXY.width / 320 * 220;//as wx
-    int offet = 10;
-    if (screenXY.height == 568)
-        offet = 19;
-    
-    return CGRectMake((screenXY.width - focusFrameWH) / 2,
-                      (screenXY.height - 64 - focusFrameWH - 83 - 50 - offet) / 2 + 64,
-                      focusFrameWH,
-                      focusFrameWH);
-}
-
-#pragma mark alert
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [super alertView:alertView clickedButtonAtIndex:buttonIndex];
-    [[NSNotificationCenter defaultCenter] postNotificationName:TBScanContinueNotification object:nil];
-}
+- (void)scanPhotoFailed
+ {
+     // 相册识别失败的回调
+     NSLog(@"scanPhotoFailed");
+ }
 
 
 @end

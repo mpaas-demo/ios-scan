@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MPScanCodeViewController : TBScanViewController <TBScanViewControllerDelegate>
 
-@property (nonatomic, assign) BOOL usingDefaultStyle;
-
 @end
 
 NS_ASSUME_NONNULL_END

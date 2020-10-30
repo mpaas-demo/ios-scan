@@ -5,10 +5,6 @@
 
 #import <UIKit/UIKit.h>
 #import <APCommonUI/APCommonUI.h>
-#import <MPBadgeService/MPBadgeService.h>
-#import <AutoTracker/AutoTracker.h>
-#import <APCrashReporter/DFCrashReport.h>
-#import <TianYan/TianYan.h>
 #import <MPMasAdapter/MPMasAdapter.h>
 #import <APLog/APLog.h>
 #import <APRemoteLogging/APRemoteLogging.h>
