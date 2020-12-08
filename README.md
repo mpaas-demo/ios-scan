@@ -8,7 +8,7 @@
 - 默认样式扫码页面
 - 自定义扫码页面
 
-<br />本 Demo 支持的基线范围：>= 10.1.32（默认使用 10.1.60）。<br />
+<br />本 Demo 支持的基线范围：>= 10.1.32（默认使用 10.1.68）。<br />
 
 <a name="jFPNB"></a>
 ## 运行Demo
@@ -24,13 +24,13 @@
 2. 进入 MPScanCodeDemo_pod 目录，执行以下命令，拉取依赖库
 
     ```shell
-    1、pod mpaas update --all
+    1、pod mpaas update 10.1.68
     2、pod update
     ```
 
 3. 直接打开 .workspace 文件，您就可以运行此 demo了
 4.  此 demo 默认连接 mPaaS 公有云的 Demo应用，若您需切换到您自己的 App，请替换 [meta.config 文件](https://tech.antfin.com/docs/2/87321#h2-u4E0Bu8F7Du914Du7F6Eu6587u4EF63)后，重新 pod update
-5.  此 demo 默认为 10.1.60基线，若您需要切换基线，打开 Podfile文件，修改 mPaaS_baseline 基线号，支持设置为 10.1.32、10.1.60、10.1.68-beta
+5.  此 demo 默认为 10.1.68基线，若您需要切换基线，打开 Podfile文件，修改 mPaaS_baseline 基线号，支持设置为 10.1.32、10.1.60、10.1.68
 
 
 <br />
@@ -51,5 +51,5 @@
 4. 此 demo 默认连接 mPaaS 公有云的 Demo应用，若您需切换到您自己的 App，请重新导入您的 [meta.config 文件](https://tech.antfin.com/docs/2/87321#h2-u4E0Bu8F7Du914Du7F6Eu6587u4EF63)。
 ![image.png](http://mpaas-demo.oss-cn-hangzhou.aliyuncs.com/readme_images/meta_config.png)<br />
 
-5. 此 demo 默认为 10.1.60基线，您可以切换到 “升级基线” Tab，选择需要的基线
+5. 此 demo 默认为 10.1.68基线，您可以切换到 “升级基线” Tab，选择需要的基线
 ![image.png](http://mpaas-demo.oss-cn-hangzhou.aliyuncs.com/readme_images/update_baseline.png)
