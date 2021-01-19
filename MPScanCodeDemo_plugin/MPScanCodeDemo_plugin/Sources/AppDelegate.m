@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  MPScanCodeDemo_plugin
+//  MPScanCodeDemo_pod
 //
 //  Created by shifei.wkp on 2019/03/28.
 //  Copyright © 2019 Alibaba. All rights reserved.
